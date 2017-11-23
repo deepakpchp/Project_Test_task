@@ -1,12 +1,12 @@
 #
-# OMNeT++/OMNEST Makefile for tictoc_sample
+# OMNeT++/OMNEST Makefile for Test
 #
 # This file was generated with the command:
 #  opp_makemake -f --deep -O out -I.
 #
 
 # Name of target to be created (-o option)
-TARGET = tictoc_sample$(D)$(EXE_SUFFIX)
+TARGET = Test$(D)$(EXE_SUFFIX)
 TARGET_DIR = .
 
 # User interface (uncomment one) (-u option)
@@ -29,8 +29,8 @@ PROJECT_OUTPUT_DIR = out
 PROJECTRELATIVE_PATH =
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
-# Object files for local .cc, .msg and .sm files
-OBJS = $O/tic1.o
+# Object files for local .cpp, .msg and .sm files
+OBJS = $O/test.o
 
 # Message files
 MSGFILES =
@@ -96,20 +96,20 @@ $O/$(TARGET): $(OBJS)  $(wildcard $(EXTRA_OBJS)) Makefile $(CONFIGFILE)
 
 .PHONY: all clean cleanall depend msgheaders smheaders
 
-.SUFFIXES: .cc
+.SUFFIXES: .cpp
 
-$O/%.o: %.cc $(COPTS_FILE) | msgheaders smheaders
+$O/%.o: %.cpp $(COPTS_FILE) | msgheaders smheaders
 	@$(MKPATH) $(dir $@)
 	$(qecho) "$<"
 	$(Q)$(CXX) -c $(CXXFLAGS) $(COPTS) -o $@ $<
 
-%_m.cc %_m.h: %.msg
+%_m.cpp %_m.h: %.msg
 	$(qecho) MSGC: $<
-	$(Q)$(MSGC) -s _m.cc $(MSGCOPTS) $?
+	$(Q)$(MSGC) -s _m.cpp $(MSGCOPTS) $?
 
-%_sm.cc %_sm.h: %.sm
+%_sm.cpp %_sm.h: %.sm
 	$(qecho) SMC: $<
-	$(Q)$(SMC) -c++ -suffix cc $(SMCOPTS) $?
+	$(Q)$(SMC) -c++ -suffix cpp $(SMCOPTS) $?
 
 msgheaders: $(MSGFILES:.msg=_m.h)
 
@@ -120,7 +120,7 @@ clean:
 	$(Q)-rm -rf $O
 	$(Q)-rm -f $(TARGET_DIR)/$(TARGET)
 	$(Q)-rm -f $(TARGET_DIR)/$(TARGET:%.dll=%.lib)
-	$(Q)-rm -f $(call opp_rwildcard, . , *_m.cc *_m.h *_sm.cc *_sm.h)
+	$(Q)-rm -f $(call opp_rwildcard, . , *_m.cpp *_m.h *_sm.cpp *_sm.h)
 
 cleanall:
 	$(Q)$(MAKE) -s clean MODE=release

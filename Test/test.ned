@@ -22,19 +22,19 @@ simple Txc1
 // Two instances (tic and toc) of Txc1 connected both ways.
 // Tic and toc will pass messages to one another.
 //
-network Tictoc1
+network Test1
 {
     @display("bgb=485,384");
     submodules:
-        tic: Txc1 {
-            @display("color=green;p=57,173;b=100,100,rect,#CA3939;t=Tic,,blue");
+        S1: Txc1 {
+            @display("color=green;p=57,173;b=100,100,rect,#CA3939;t=S1,,blue");
         }
 
-        toc: Txc1 {
+        S2: Txc1 {
 
-            @display("p=384,167;b=100,100,oval,#008000,,0;t=Toc");
+            @display("p=384,167;b=100,100,oval,#008000,,0;t=S2,,blue");
         }
     connections:
-        tic.out --> {  datarate = 8Mbps;@display("ls=green"); } --> toc.in;
-        tic.in <-- {  datarate = 8Mbps;@display("ls=red"); } <-- toc.out;
+        S1.out --> {  datarate = 8Mbps;@display("ls=green"); } --> S2.in;
+        S1.in <-- {  datarate = 8Mbps;@display("ls=red"); } <-- S2.out;
 }

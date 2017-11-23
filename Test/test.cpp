@@ -1,5 +1,5 @@
 /*
- * tic1.cc
+ * test.cpp
  *
  *  Created on: Nov 23, 2017
  *      Author: Deepak Paramashivam
@@ -37,7 +37,7 @@ void Txc1::initialize() {
     scheduleAt(simTime() + 20.0, timeOut);
 
     /*Initially Tic will start sending the packet of length 512Kb*/
-    if (strcmp("tic", getName()) == 0) {
+    if (strcmp("S1", getName()) == 0) {
         cPacket *msg = new cPacket("512Kb");
         msg->addByteLength(1024 * 512);
         send(msg, "out");
@@ -71,4 +71,7 @@ void Txc1::handleMessage(cMessage *msg) {
         }
     }
 }
+
+
+
 
