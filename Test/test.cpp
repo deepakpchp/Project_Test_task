@@ -7,14 +7,13 @@
 
 #include <string.h>
 #include <omnetpp.h>
-#define PARAMETER1 2
+#define PARAMETER1 1
 
 using namespace omnetpp;
 class Txc1: public cSimpleModule {
 private:
     cMessage *event;  // to introduce delay in each packet
     cMessage *timeOut; // to indicate 20 seconds limit
-    cMessage *tictocMsg; // variable to remember the message until we send it back
     bool flag; //To indicate the timeout
 
 protected:
@@ -44,32 +43,25 @@ void Txc1::initialize() {
     }
 }
 void Txc1::handleMessage(cMessage *msg) {
-    /*If 20s timer has expired then dont send any further messages*/
+    /*If 20s timer is expired then dont process the packets*/
+    if(!flag)
+    {
+        return;
+    }
+    /*If timer expired event occures then set the flag to false which will prevent further processing of messages*/
     if (msg == timeOut) {
         flag = false;
     }
-    /*If msg type is event then it is self posted event to induce delay
-     * Hence Send out the message*/
-    else if (msg == event) {
-        if (flag) {
-            send(tictocMsg, "out"); // send out the message
-            tictocMsg = nullptr;
-        }
+    /*If packet is received in S1 then send out with 1 sec delay*/
+    if (strcmp("S1", getName()) == 0) {
+        sendDelayed(msg, 1, "out");
     }
-    /*Its a new message hence save the message and start the timer*/
-    else {
+    /*If packet is received in S" then send out with exponential(PARAMETER1) sec delay*/
+    else
+    {
+        sendDelayed(msg, exponential(PARAMETER1), "out");
+    }
 
-        tictocMsg = msg;
-        /*If tick then indice 1s delay*/
-        if (strcmp("tic", getName()) == 0) {
-            scheduleAt(simTime() + 1.0, event);
-        }
-        /*this is toc hence induce, has a delay of X seconds, where X is
-         * exponentially distributed with parameter 1 */
-        else {
-            scheduleAt(simTime() + exponential(PARAMETER1), event);
-        }
-    }
 }
 
 
